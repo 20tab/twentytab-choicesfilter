@@ -58,4 +58,4 @@ class MyModelAdmin(ChoicesFilterAdmin):
 admin.site.register(MyModel, MyModelAdmin)
 ```
 
-If you want to initielize changelist admin view with empty queryset set 'choices_mandatory = True'
+If you want to initialize changelist admin view with empty queryset set 'choices_mandatory = True'
