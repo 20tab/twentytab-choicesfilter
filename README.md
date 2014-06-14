@@ -23,12 +23,7 @@ INSTALLED_APPS = {
 
 - Static files
 
-Run collectstatic command or map static directory. If you use uWSGI you can map static files:
-
-```ini
-static-map = /static/select2/=%(path_to_site_packages)/select2/static/select2
-static-map = /static/choicesfilter/=%(path_to_site_packages)/choicesfilter/static/choicesfilter
-```
+Run collectstatic command or map static directory. 
 
 ## Usage
 
