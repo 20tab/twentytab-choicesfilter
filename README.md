@@ -23,7 +23,7 @@ INSTALLED_APPS = {
 
 - Static files
 
-Run collectstatic command or map static directory. 
+Run collectstatic command or map static directory.
 
 ## Usage
 
@@ -54,3 +54,5 @@ admin.site.register(MyModel, MyModelAdmin)
 ```
 
 If you want to initialize changelist admin view with empty queryset set 'choices_mandatory = True'
+
+** This app overrides {% block filters %} in change_list.html template. **
