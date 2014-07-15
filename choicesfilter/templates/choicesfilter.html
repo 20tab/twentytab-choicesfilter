@@ -1,8 +1,20 @@
 {% extends 'admin/change_list.html' %}
 {% load i18n %}
 
+{% block extrastyle %}
+    {{ block.super }}
+    <style type="text/css">
+        .custom-actions{
+            color: #999;
+            padding: 3px;
+            border-top: 1px solid #fff;
+            border-bottom: 1px solid #ddd;
+            background: white url({{STATIC_URL}}admin/img/nav-bg-reverse.gif) 0 -10px repeat-x;
+        }
+    </style>
+{% endblock %}
 {% block filters %}
-    <div class="actions">
+    <div class="custom-actions">
         <form action="">
             {{ choicesfilter }}
             <button type="button" id="id_choicesfilter">{% trans 'Go' %}</button>
