@@ -46,8 +46,8 @@ from choicesfilter.admin import ChoicesFilterAdmin
 
 
 class MyModelAdmin(ChoicesFilterAdmin):
-    list_display = (u'nome', u'related_obj')
-    choicesfilter = [u'nome', 'related_obj']
+    list_display = (u'name', u'related_obj')
+    choicesfilter = [u'name', 'related_obj']
     choices_mandatory = False
 
 admin.site.register(MyModel, MyModelAdmin)
