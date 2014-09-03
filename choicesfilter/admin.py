@@ -18,6 +18,7 @@ class ChoicesFilterAdmin(admin.ModelAdmin):
     change_list_template = u'choicesfilter.html'
     choicesfilter = []
     choices_mandatory = False
+    choicesfilter_choices = {}
 
     def changelist_view(self, request, extra_context=None):
         if self.choicesfilter:
@@ -27,15 +28,21 @@ class ChoicesFilterAdmin(admin.ModelAdmin):
             for f in self.choicesfilter:
                 field = self.model._meta.get_field(f)
                 if field.__class__.__name__ == u'ForeignKey':
-                    choices = [(u'', u'---------')]
-                    choices.extend([(el.pk, el.__unicode__()) for el in field.related.parent_model.objects.filter(
-                        **field.rel.limit_choices_to
-                    )])
+                    if f in self.choicesfilter_choices.keys():
+                        choices = self.choicesfilter_choices[f]
+                    else:
+                        choices = [(u'', u'---------')]
+                        choices.extend([(el.pk, el.__unicode__()) for el in field.related.parent_model.objects.filter(
+                            **field.rel.limit_choices_to
+                        )])
                     filter_field = forms.ChoiceField(choices=choices, required=False)
                     temp_list.append((f, u'{}__id__exact'.format(f), filter_field))
                 elif field.__class__.__name__ == u'CharField' and getattr(field, u'choices', None):
-                    choices = [(u'', u'---------')]
-                    choices.extend(list(field.choices))
+                    if f in self.choicesfilter_choices.keys():
+                        choices = self.choicesfilter_choices[f]
+                    else:
+                        choices = [(u'', u'---------')]
+                        choices.extend(list(field.choices))
                     filter_field = forms.ChoiceField(choices=choices, required=False)
                     temp_list.append((f, u'{}__icontains'.format(f), filter_field))
                 else:

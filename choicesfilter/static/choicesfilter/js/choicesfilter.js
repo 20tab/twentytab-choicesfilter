@@ -12,4 +12,8 @@ jQuery(function($){
         window.location.href = "?"+qs.join('&');
     });
 
+    $('#id_choicesfilter_reset').on('click', function(){
+        window.location.href = window.location.pathname;
+    });
+
 });

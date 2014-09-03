@@ -49,10 +49,13 @@ class MyModelAdmin(ChoicesFilterAdmin):
     list_display = (u'name', u'related_obj')
     choicesfilter = [u'name', 'related_obj']
     choices_mandatory = False
+    choicesfilter_choices = {'related_obj': RelatedClass.objects.values_list('pk', 'obj_field').all()}
 
 admin.site.register(MyModel, MyModelAdmin)
 ```
 
 If you want to initialize changelist admin view with empty queryset set 'choices_mandatory = True'
+
+** REMEMBER: choicesfilter_choices MUST be a list of binary tuples like choices for a CharField
 
 ** This app overrides {% block filters %} in change_list.html template. **
