@@ -56,6 +56,6 @@ admin.site.register(MyModel, MyModelAdmin)
 
 If you want to initialize changelist admin view with empty queryset set 'choices_mandatory = True'
 
-** REMEMBER: choicesfilter_choices MUST be a list of binary tuples like choices for a CharField
+** REMEMBER: choicesfilter_choices MUST be a list of binary tuples like choices for a CharField **
 
 ** This app overrides {% block filters %} in change_list.html template. **
