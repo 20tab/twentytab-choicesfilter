@@ -41,6 +41,19 @@ class ChoicesFilterAdmin(admin.ModelAdmin):
             field = model._meta.get_field(f)
             return self._get_recursive_related_choices(field.related.parent_model, fields_as_list[1:])
 
+    def _validate_related_choicesfilter(self, model, lookup_as_list):
+        if len(lookup_as_list) < 1:
+            return False
+        elif len(lookup_as_list) == 1:
+            f = lookup_as_list[0]
+            field = model._meta.get_field(f)
+            if field.__class__.__name__ == u'ForeignKey':
+                return True
+        else:
+            f = lookup_as_list[0]
+            field = model._meta.get_field(f)
+            return self._validate_related_choicesfilter(field.related.parent_model, lookup_as_list[1:])
+
     def changelist_view(self, request, extra_context=None):
         if self.choicesfilter:
             extra_context = extra_context or {}
@@ -76,17 +89,6 @@ class ChoicesFilterAdmin(admin.ModelAdmin):
                 if filter_field:
                     temp_list.append((f, u'{}__id__exact'.format(f), filter_field))
 
-                # field = self.model._meta.get_field(f)
-                # if field.__class__.__name__ == u'ForeignKey':
-                #     if f in self.choicesfilter_choices.keys():
-                #         choices = self.choicesfilter_choices[f]
-                #     else:
-                #         choices = [(u'', u'---------')]
-                #         choices.extend([(el.pk, el.__unicode__()) for el in field.related.parent_model.objects.filter(
-                #             **field.rel.limit_choices_to
-                #         )])
-                #     filter_field = forms.ChoiceField(choices=choices, required=False)
-                #     temp_list.append((f, u'{}__id__exact'.format(f), filter_field))
 
             extra_context['choicesfilter'] = ChoicesFilterForm(temp_list, request.GET)
         return super(ChoicesFilterAdmin, self).changelist_view(request, extra_context=extra_context)
@@ -96,6 +98,11 @@ class ChoicesFilterAdmin(admin.ModelAdmin):
         if self.choices_mandatory and not request.GET:
             return qs.none()
         return qs
+
+    def lookup_allowed(self, lookup, value):
+        if lookup.replace('__id__exact', '') in self.related_choicesfilter:
+            return self._validate_related_choicesfilter(self.model, lookup.replace('__id__exact', '').split('__'))
+        return super(ChoicesFilterAdmin, self).lookup_allowed(lookup, value)
 
     class Media:
         js = SelectAutocomplete.Media.js + (u'{}choicesfilter/js/choicesfilter.js'.format(settings.STATIC_URL),)
