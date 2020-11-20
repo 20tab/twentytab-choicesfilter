@@ -10,7 +10,7 @@ setup(
     url='https://github.com/20tab/twentytab-choicesfilter',
     license='MIT License',
     install_requires=[
-        'Django >=1.6',
+        'Django ~=1.8.0',
         'twentytab-select2'
     ],
     packages=find_packages(),

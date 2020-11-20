@@ -32,14 +32,14 @@ class ChoicesFilterAdmin(admin.ModelAdmin):
                     choices = self.choicesfilter_choices[f]
                 else:
                     choices = [(u'', u'---------')]
-                    choices.extend([(el.pk, el.__unicode__()) for el in field.related.parent_model.objects.filter(
+                    choices.extend([(el.pk, el.__unicode__()) for el in field.related_field.model.objects.filter(
                         **field.rel.limit_choices_to
                     )])
                 return forms.ChoiceField(choices=choices, required=False)
         else:
             f = fields_as_list[0]
             field = model._meta.get_field(f)
-            return self._get_recursive_related_choices(field.related.parent_model, fields_as_list[1:])
+            return self._get_recursive_related_choices(field.related_field.model, fields_as_list[1:])
 
     def _validate_related_choicesfilter(self, model, lookup_as_list):
         if len(lookup_as_list) < 1:
@@ -52,7 +52,7 @@ class ChoicesFilterAdmin(admin.ModelAdmin):
         else:
             f = lookup_as_list[0]
             field = model._meta.get_field(f)
-            return self._validate_related_choicesfilter(field.related.parent_model, lookup_as_list[1:])
+            return self._validate_related_choicesfilter(field.related_field.model, lookup_as_list[1:])
 
     def changelist_view(self, request, extra_context=None):
         if self.choicesfilter:
@@ -66,7 +66,7 @@ class ChoicesFilterAdmin(admin.ModelAdmin):
                         choices = self.choicesfilter_choices[f]
                     else:
                         choices = [(u'', u'---------')]
-                        choices.extend([(el.pk, el.__unicode__()) for el in field.related.parent_model.objects.filter(
+                        choices.extend([(el.pk, el.__unicode__()) for el in field.related_field.model.objects.filter(
                             **field.rel.limit_choices_to
                         )])
                     filter_field = forms.ChoiceField(choices=choices, required=False)
